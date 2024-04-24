@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "435334064325",
+    "project_id": "keiskis-daiktais-c9ec2",
+    "storage_bucket": "keiskis-daiktais-c9ec2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:435334064325:android:8e761d79295294d733a8ac",
+        "android_client_info": {
+          "package_name": "com.example.keiskisdaiktais"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA896OBZGTEVGi7IxULBWt4lV6Uo5VIKQA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
