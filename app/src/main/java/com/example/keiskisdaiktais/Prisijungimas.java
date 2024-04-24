@@ -54,7 +54,7 @@ public class Prisijungimas extends AppCompatActivity {
                                     Toast.makeText(Prisijungimas.this, "Login successful", Toast.LENGTH_SHORT).show();
 
                                     // Navigate to next activity
-                                    Intent intent = new Intent(Prisijungimas.this, AntrasLangas.class);
+                                    Intent intent = new Intent(Prisijungimas.this, Pagrindinis.class);
                                     startActivity(intent);
                                     finish(); // Optional, close the current activity
                                 } else {
@@ -70,7 +70,6 @@ public class Prisijungimas extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, // Aplikacija pilnu ekranu
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.activity_prisijungimas);
 
         Button button = findViewById(R.id.button5);
 
