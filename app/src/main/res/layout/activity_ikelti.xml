@@ -13,28 +13,46 @@
         android:id="@+id/etDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="272dp"
         android:gravity="top"
         android:hint="Aprašymas"
         android:inputType="textMultiLine"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="446dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
 
     <EditText
         android:id="@+id/etPrice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="468dp"
         android:hint="Kaina"
         android:inputType="numberDecimal"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="638dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="-16dp" />
 
     <Button
         android:id="@+id/btnUpload"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="800dp"
         android:text="Įkelti nuotrauką"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="286dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="-44dp" />
+
+    <Button
+        android:id="@+id/button13"
+        android:layout_width="69dp"
+        android:layout_height="69dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="286dp"
+        android:layout_marginBottom="204dp"
+        app:icon="?attr/homeAsUpIndicator"
+        app:iconTint="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="#FFFFFF" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
