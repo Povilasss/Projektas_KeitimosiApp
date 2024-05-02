@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -75,21 +76,15 @@ public class Ikelti extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Toast.makeText(Ikelti.this, "Nuotrauka įkelta sėkmingai", Toast.LENGTH_SHORT).show();
-
-                            String imageUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
-                            String description = etDescription.getText().toString().trim();
-                            String price = etPrice.getText().toString().trim();
-
-                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("uploads");
-                            String uploadId = databaseReference.push().getKey();
-
-                            Map<String, Object> uploadDetails = new HashMap<>();
-                            uploadDetails.put("imageUrl", imageUrl);
-                            uploadDetails.put("description", description);
-                            uploadDetails.put("price", price);
-
-                            databaseReference.child(uploadId).setValue(uploadDetails);
+                            Task<Uri> downloadUrlTask = taskSnapshot.getStorage().getDownloadUrl();
+                            downloadUrlTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    String imageUrl = uri.toString();
+                                    // Toliau naudokite imageUrl kaip nuotraukos URL
+                                    saveToDatabase(imageUrl); // Pridėta nauja funkcija
+                                }
+                            });
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -102,5 +97,21 @@ public class Ikelti extends AppCompatActivity {
             Toast.makeText(this, "Pasirinkite nuotrauką", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void saveToDatabase(String imageUrl) {
+        String description = etDescription.getText().toString().trim();
+        String price = etPrice.getText().toString().trim();
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("uploads");
+        String uploadId = databaseReference.push().getKey();
+
+        Map<String, Object> uploadDetails = new HashMap<>();
+        uploadDetails.put("imageUrl", imageUrl);
+        uploadDetails.put("description", description);
+        uploadDetails.put("price", price);
+
+        databaseReference.child(uploadId).setValue(uploadDetails);
+        Toast.makeText(Ikelti.this, "Duomenys sėkmingai išsaugoti", Toast.LENGTH_SHORT).show();
     }
 }

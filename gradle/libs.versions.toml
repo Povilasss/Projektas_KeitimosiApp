@@ -12,6 +12,7 @@ firebaseAuth = "22.3.1"
 firebaseDatabase = "20.3.1"
 firebaseFirestore = "24.11.1"
 firebaseStorage = "20.3.0"
+picasso = "2.71828"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -26,6 +27,7 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
+picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
