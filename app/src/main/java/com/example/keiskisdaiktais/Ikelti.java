@@ -1,25 +1,29 @@
 package com.example.keiskisdaiktais;
 
-import static com.example.keiskisdaiktais.R.layout.activity_ikelti;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,17 +34,23 @@ public class Ikelti extends AppCompatActivity {
     private Button btnUpload;
     private Uri imageUri;
     private StorageReference storageReference;
+    private DatabaseReference databaseReference;
+    private FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(activity_ikelti);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_ikelti);
 
         etDescription = findViewById(R.id.etDescription);
         etPrice = findViewById(R.id.etPrice);
         btnUpload = findViewById(R.id.btnUpload);
 
         storageReference = FirebaseStorage.getInstance().getReference();
+        databaseReference = FirebaseDatabase.getInstance().getReference("uploads");
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +91,6 @@ public class Ikelti extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     String imageUrl = uri.toString();
-                                    // Toliau naudokite imageUrl kaip nuotraukos URL
                                     saveToDatabase(imageUrl); // Pridėta nauja funkcija
                                 }
                             });
@@ -103,15 +112,21 @@ public class Ikelti extends AppCompatActivity {
         String description = etDescription.getText().toString().trim();
         String price = etPrice.getText().toString().trim();
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("uploads");
-        String uploadId = databaseReference.push().getKey();
+        if (currentUser != null) {
+            String userId = currentUser.getUid(); // Gauti vartotojo ID
 
-        Map<String, Object> uploadDetails = new HashMap<>();
-        uploadDetails.put("imageUrl", imageUrl);
-        uploadDetails.put("description", description);
-        uploadDetails.put("price", price);
+            String uploadId = databaseReference.push().getKey();
 
-        databaseReference.child(uploadId).setValue(uploadDetails);
-        Toast.makeText(Ikelti.this, "Duomenys sėkmingai išsaugoti", Toast.LENGTH_SHORT).show();
+            Map<String, Object> uploadDetails = new HashMap<>();
+            uploadDetails.put("userId", userId); // Priskirti vartotojo ID
+            uploadDetails.put("imageUrl", imageUrl);
+            uploadDetails.put("description", description);
+            uploadDetails.put("price", price);
+
+            databaseReference.child(uploadId).setValue(uploadDetails);
+            Toast.makeText(Ikelti.this, "Duomenys sėkmingai išsaugoti", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Vartotojas neprisijungęs", Toast.LENGTH_SHORT).show();
+        }
     }
 }
