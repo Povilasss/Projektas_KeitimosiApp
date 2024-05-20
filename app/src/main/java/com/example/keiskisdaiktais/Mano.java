@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -53,9 +56,12 @@ public class Mano extends AppCompatActivity {
                             uploadList = new ArrayList<>();
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 Upload upload = snapshot.getValue(Upload.class);
-                                uploadList.add(upload);
+                                if (upload != null) {
+                                    upload.setUploadId(snapshot.getKey()); // Ensure the key is set
+                                    uploadList.add(upload);
+                                }
                             }
-                            adapter = new MyAdapter(uploadList);
+                            adapter = new MyAdapter(uploadList, databaseReference);
                             recyclerView.setAdapter(adapter);
                         }
 
@@ -67,12 +73,16 @@ public class Mano extends AppCompatActivity {
         }
     }
 
+
+
     static class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
         private List<Upload> uploadList;
+        private DatabaseReference databaseReference;
 
-        public MyAdapter(List<Upload> uploadList) {
+        public MyAdapter(List<Upload> uploadList, DatabaseReference databaseReference) {
             this.uploadList = uploadList;
+            this.databaseReference = databaseReference;
         }
 
         @NonNull
@@ -97,7 +107,7 @@ public class Mano extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     int clickedPosition = holder.getAdapterPosition();
-                    onDeleteClick(clickedPosition);
+                    onDeleteClick(clickedPosition, holder.itemView);
                 }
             });
 
@@ -132,11 +142,28 @@ public class Mano extends AppCompatActivity {
             }
         }
 
-        private void onDeleteClick(int position) {
-            // Handle delete functionality
-            // Remove the item from the list and update the RecyclerView
-            uploadList.remove(position);
-            notifyItemRemoved(position);
+        private void onDeleteClick(int position, View itemView) {
+            Upload selectedItem = uploadList.get(position);
+            String selectedKey = selectedItem.getUploadId(); // Ensure uploadId is correctly set
+
+            if (selectedKey != null) {
+                databaseReference.child(selectedKey).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Remove the item from the list and notify the adapter
+                        uploadList.remove(position);
+                        notifyItemRemoved(position);
+                        Toast.makeText(itemView.getContext(), "Item deleted", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(itemView.getContext(), "Failed to delete item", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                Toast.makeText(itemView.getContext(), "Failed to get the item ID", Toast.LENGTH_SHORT).show();
+            }
         }
 
         private void onEditClick(int position) {
@@ -145,3 +172,5 @@ public class Mano extends AppCompatActivity {
         }
     }
 }
+
+

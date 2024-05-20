@@ -6,6 +6,8 @@ public class Upload {
     private String price;
     private String userId; // Jei reikalinga
 
+    private String uploadId;
+
     public Upload() {
         // Tuščias konstruktorius reikalingas Firebaseui
     }
@@ -15,6 +17,14 @@ public class Upload {
         this.description = description;
         this.price = price;
         this.userId = userId;
+    }
+
+    public String getUploadId() {
+        return uploadId;
+    }
+
+    public void setUploadId(String uploadId) {
+        this.uploadId = uploadId;
     }
 
     public String getImageUrl() {
@@ -48,5 +58,6 @@ public class Upload {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
 }
 

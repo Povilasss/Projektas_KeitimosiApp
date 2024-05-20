@@ -16,6 +16,9 @@
         android:theme="@style/Theme.KeiskisDaiktais"
         tools:targetApi="31">
         <activity
+            android:name=".Ieskoti"
+            android:exported="false" />
+        <activity
             android:name=".Mano"
             android:exported="false" />
         <activity
