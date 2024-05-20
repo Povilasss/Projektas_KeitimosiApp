@@ -31,7 +31,7 @@ public class Ikelti extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private EditText etDescription, etPrice;
-    private Button btnUpload;
+    private Button btnUpload, button13;
     private Uri imageUri;
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
@@ -47,6 +47,7 @@ public class Ikelti extends AppCompatActivity {
         etDescription = findViewById(R.id.etDescription);
         etPrice = findViewById(R.id.etPrice);
         btnUpload = findViewById(R.id.btnUpload);
+        button13 = findViewById(R.id.button13);  // Add this line to find the button by its ID
 
         storageReference = FirebaseStorage.getInstance().getReference();
         databaseReference = FirebaseDatabase.getInstance().getReference("uploads");
@@ -56,6 +57,15 @@ public class Ikelti extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openFileChooser();
+            }
+        });
+
+        button13.setOnClickListener(new View.OnClickListener() {  // Add this block to handle button click
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Ikelti.this, Pagrindinis.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -128,5 +138,8 @@ public class Ikelti extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Vartotojas neprisijungęs", Toast.LENGTH_SHORT).show();
         }
+
     }
+
 }
+
