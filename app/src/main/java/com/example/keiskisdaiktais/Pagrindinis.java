@@ -41,6 +41,15 @@ public class Pagrindinis extends AppCompatActivity {
             }
         });
 
+        Button ieskoti = findViewById(R.id.button11);
+        ieskoti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Pagrindinis.this,Ieskoti.class);
+                startActivity(intent);
+            }
+        });
+
         Button button = findViewById(R.id.button9);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,6 +58,7 @@ public class Pagrindinis extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
 
         Button button12 = findViewById(R.id.button12);
         button12.setOnClickListener(new View.OnClickListener() {
